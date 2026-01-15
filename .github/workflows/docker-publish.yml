@@ -83,3 +83,18 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Run Trivy in GitHub SBOM mode to generate CycloneDX SBOM
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: 'image'
+          format: 'cyclonedx'
+          output: 'bom_container.json'
+          image-ref: ${{ steps.meta.outputs.tags }}
+          scanners: "sbom"
+      - name: Upload trivy SBOM as a Github artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: '${{ github.workspace }}/bom_container.json'
+		  
