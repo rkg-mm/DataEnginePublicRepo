@@ -91,6 +91,7 @@ jobs:
           format: 'cyclonedx'
           output: 'sbom_container.cyclonedx.json'
           image-ref: ${{ steps.meta.outputs.tags }}
+          args: '--skip-dirs /app'
       - name: Upload trivy SBOM as a Github artifact
         uses: actions/upload-artifact@v4
         with:
