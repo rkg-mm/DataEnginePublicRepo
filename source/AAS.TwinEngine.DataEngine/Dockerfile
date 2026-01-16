@@ -11,8 +11,8 @@ ENV PATH="$PATH:/root/.dotnet/tools"
 RUN dotnet-CycloneDX "AAS.TwinEngine.DataEngine/AAS.TwinEngine.DataEngine.csproj" -o "sbom/" --exclude-dev --exclude-test-projects --set-nuget-purl --spec-version 1.6  --disable-package-restore
 
 # Create an "app-sbom-artifact" image which can be use to extract the pure APP SBOM after completing the docker build (we want to keep the SBOM for the application separate from the pure linux image SBOM as this provides more details and simplifies vuln management)
-FROM scratch as app-sbom-artifact
-COPY --from=build sbom/bom.xml /sbom_application.cyclonedx.xml
+FROM scratch AS app-sbom-artifact
+COPY --from=build /App/sbom/bom.xml /sbom_application.cyclonedx.xml
 
 # Create final application image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine@sha256:a0ce42fe86548363a9602c47fc3bd4cf9c35a2705c68cd98d7ce18ae8735b83c
